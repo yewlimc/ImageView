@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.google.firebase.database.ServerValue;
 
+import java.util.Date;
+
 public class Post {
 
     private String postKey;
@@ -13,14 +15,16 @@ public class Post {
     private String userImage;
     private Object timestamp;
     private String userName;
+    private String dateTime;
 
-    public Post(String image, String description, String userID, String userImage, String userName) {
+    public Post(String image, String description, String userID, String userImage, String userName, String dateTime) {
         this.image = image;
         this.description = description;
         this.userID = userID;
         this.userImage = userImage;
         this.timestamp = ServerValue.TIMESTAMP;
         this.userName = userName;
+        this.dateTime = dateTime;
     }
 
     public Post()
@@ -61,6 +65,10 @@ public class Post {
         return timestamp;
     }
 
+    public String getDateTime() {
+        return dateTime;
+    }
+
     // Setters
 
     public void setPostKey(String postKey) {
@@ -85,5 +93,9 @@ public class Post {
 
     public void setTimestamp(Object timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

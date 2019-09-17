@@ -43,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class NewPostActivity extends AppCompatActivity {
@@ -97,57 +98,59 @@ public class NewPostActivity extends AppCompatActivity {
         descText = findViewById(R.id.newPostDesc);
 
         postButton = findViewById(R.id.postButton);
-//        postButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // get URI from another method
-//
-//
-//
-//                loadingBar.setVisibility(View.VISIBLE);
-//                postButton.setVisibility(View.INVISIBLE);
-//
-//                // Check all input
-//                if (!descText.getText().toString().isEmpty() && postUri != null)
-//                {
-//                    // TODO:  Create post object and add into Firebase DB
-//                    // Upload image to Firebase
-//                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images");
-//                    final StorageReference imageFilePath = storageReference.child(postUri.getLastPathSegment());
-//                    imageFilePath.putFile(postUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                @Override
-//                                public void onSuccess(Uri uri) {
-//                                    String imageURL = uri.toString();
-//
-//                                    // Create a post object
-//                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-//
-//                                    // Add post object to Firebase DB
-//                                    uploadPost(post);
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(NewPostActivity.this, "Error uploading post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                    loadingBar.setVisibility(View.INVISIBLE);
-//                                    postButton.setVisibility(View.VISIBLE);
-//                                }
-//                            });
-//                        }
-//                    });
-//
-//                }
-//                else
-//                {
-//                    loadingBar.setVisibility(View.INVISIBLE);
-//                    postButton.setVisibility(View.VISIBLE);
-//                    Toast.makeText(NewPostActivity.this, "Please make sure image is selected and description is filled. ", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // get URI from another method
+
+
+
+                loadingBar.setVisibility(View.VISIBLE);
+                postButton.setVisibility(View.INVISIBLE);
+
+                // Check all input
+                if (!descText.getText().toString().isEmpty() && postUri != null)
+                {
+                    // TODO:  Create post object and add into Firebase DB
+                    // Upload image to Firebase
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images");
+                    final StorageReference imageFilePath = storageReference.child(postUri.getLastPathSegment());
+                    imageFilePath.putFile(postUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String imageURL = uri.toString();
+
+                                    Date currentTime = Calendar.getInstance().getTime();
+
+                                    // Create a post object
+                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), currentTime.toString());
+
+                                    // Add post object to Firebase DB
+                                    uploadPost(post);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(NewPostActivity.this, "Error uploading post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    loadingBar.setVisibility(View.INVISIBLE);
+                                    postButton.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+                    });
+
+                }
+                else
+                {
+                    loadingBar.setVisibility(View.INVISIBLE);
+                    postButton.setVisibility(View.VISIBLE);
+                    Toast.makeText(NewPostActivity.this, "Please make sure image is selected and description is filled. ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 
@@ -213,7 +216,7 @@ public class NewPostActivity extends AppCompatActivity {
 
         switch(requestCode){
             case REQUEST_IMAGE_CAPTURE:
-                if(resultCode == RESULT_OK){
+                if(resultCode == RESULT_OK && requestCode == requestCode && data != null){
                     Bundle extras = data.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     postImage.setImageBitmap(imageBitmap);
@@ -249,15 +252,15 @@ public class NewPostActivity extends AppCompatActivity {
         }
     }
 
-    public void clickButton(View view) {
-        // Log the URI
-        if (postUri == null)
-        {
-            Log.v("URI Status", "null. ");
-        }
-        else
-        {
-            Log.v("URI Status", postUri.toString());
-        }
-    }
+//    public void clickButton(View view) {
+//        // Log the URI
+//        if (postUri == null)
+//        {
+//            Log.v("URI Status", "null. ");
+//        }
+//        else
+//        {
+//            Log.v("URI Status", postUri.toString());
+//        }
+//    }
 }

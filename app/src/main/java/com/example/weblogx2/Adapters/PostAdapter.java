@@ -44,6 +44,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         Picasso.get().load(mData.get(position).getImage()).into(holder.postImage);
         Picasso.get().load(mData.get(position).getUserImage()).into(holder.post_userImage);
         holder.userName.setText(mData.get(position).getUserName());
+        holder.datetime.setText(mData.get(position).getDateTime());
     }
 
     @Override

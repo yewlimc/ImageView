@@ -56,8 +56,7 @@
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPostDesc"
-        android:onClick="clickButton"/>
+        app:layout_constraintTop_toBottomOf="@+id/newPostDesc" />
 
     <ProgressBar
         android:id="@+id/newPostProgressBar"
