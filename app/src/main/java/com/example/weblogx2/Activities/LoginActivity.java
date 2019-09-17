@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,9 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView registerText;
     private ProgressBar loginProgressBar;
-
     private FirebaseAuth mAuth;
 
     private Intent homeIntent;
@@ -44,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
         loginProgressBar = findViewById(R.id.loginProgressBar);
-        registerText = findViewById(R.id.registerText);
+        registerText = findViewById(R.id.loginText);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -118,9 +113,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            Intent registerIntent = new Intent (getApplicationContext(), com.example.weblogx2.Activities.RegisterActivity.class);
-            startActivity(registerIntent);
-            finish();
+//            Intent lIntent = new Intent (getApplicationContext(), com.example.weblogx2.Activities.LoginActivity.class);
+//            startActivity(lIntent);
+//            finish();
         }
     }
 }

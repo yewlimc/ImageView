@@ -3,6 +3,7 @@ package com.example.weblogx2.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Text;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -47,6 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar loadingBar;
     private Button registerButton;
 
+    private TextView loginpage;
+
     private FirebaseAuth mAuth;
 
     @Override
@@ -61,6 +67,15 @@ public class RegisterActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.registerEmail);
         userPassword = findViewById(R.id.registerPassword);
         userCfmPassword = findViewById(R.id.registerCfmPassword);
+
+        loginpage = findViewById(R.id.register_logintext);
+        loginpage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(toLogin);
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -114,6 +129,14 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(RegisterActivity.this, " We are in portrait mode",
+                    Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(RegisterActivity.this, "We are in Landscape mode",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     // This method is to create a user account and to add the account into Firebase
@@ -238,4 +261,5 @@ public class RegisterActivity extends AppCompatActivity {
             userImage.setImageURI(profileUri);
         }
     }
+
 }

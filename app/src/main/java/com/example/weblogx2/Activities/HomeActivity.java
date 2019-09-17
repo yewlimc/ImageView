@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot postsnap : dataSnapshot.getChildren()) {
                     Post post = postsnap.getValue(Post.class);
                     postList.add(post);
+                    Log.v("Post", "");
 
                 }
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
@@ -93,6 +95,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        manager.setReverseLayout(true);
+        manager.setStackFromEnd(true);
 
         postRecyclerView = findViewById(R.id.recycleViewHome);
         // postRecyclerView = getLayoutInflater().inflate(R.layout.activity_home, null).findViewById(R.id.recycleViewHome);

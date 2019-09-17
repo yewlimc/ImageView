@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="WeBlog"
+            android:text="ImageView"
             android:textColor="#6e6e6e"
             android:textSize="36dp"
             android:textStyle="bold"
@@ -93,7 +93,7 @@
             app:layout_constraintTop_toTopOf="@+id/loginButton" />
 
         <TextView
-            android:id="@+id/registerText"
+            android:id="@+id/loginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
