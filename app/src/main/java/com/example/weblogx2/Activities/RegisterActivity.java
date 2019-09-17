@@ -79,8 +79,9 @@ public class RegisterActivity extends AppCompatActivity {
                 // If the register button is pressed, the fields are checked to see if they are empty
                 // If any fields are empty, a "Toast" will be displayed to the user asking him/her to fill in all fields
                 // If all fields are filled in, the method "CreateUserAccount" will be started
-                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || password.isEmpty() || cfmPassword.isEmpty())
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || cfmPassword.isEmpty() || profileUri == null)
                 {
+                    Log.v("Name", name);
                     Toast.makeText(RegisterActivity.this, "Please fill in all fields. ", Toast.LENGTH_SHORT).show();
                     registerButton.setVisibility(View.VISIBLE);
                     loadingBar.setVisibility(View.INVISIBLE);
@@ -116,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // This method is to create a user account and to add the account into Firebase
-    private void CreateUserAccount(String name, String email, String password) {
+    private void CreateUserAccount(final String name, String email, String password) {
 
         // Creates a user and save it to Firebase
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -124,24 +125,16 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful())
                 {
+                    Log.v("Username set to", userName.toString());
+                    UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(userName.toString()).build();
                     // If the account is successfully created, a toast is displayed to let the user know that the account has been created
                     Toast.makeText(RegisterActivity.this, "Account created. ", Toast.LENGTH_SHORT).show();
-                    // UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(userName.toString());
                     // This statement is to check whether if the user has selected an image to be attached to the profile.
                     // If an image is selected during the registration process, an Uri will be assigned to the variable "profileUri" (which is not null)
                     // The updateUserInfo method will be started
                     // note: "image.getDrawable()" is not used as a Uri will be assigned no matter if an image is selected or not.
-                    if (profileUri != null) {
-                        Log.v("Image is available: ", "Upload");
-                        updateUserInfo(userName, profileUri, mAuth.getCurrentUser());
-                    }
-                    else
-                    {
-                        // If image is not selected, a toast will be displayed to let the user know the registeration is completed and will go to the HomeActivity
-                        Log.v("Image is not available: ", "Home");
-                        Toast.makeText(RegisterActivity.this, "Register completed. ", Toast.LENGTH_SHORT).show();
-                        homeUI();
-                    }
+                    Log.v("Image is available: ", "Upload");
+                    updateUserInfo(name, profileUri, mAuth.getCurrentUser());
                 }
                 else
                 {
@@ -155,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // This method is to upload the image onto FirebaseStorage
-    private void updateUserInfo(final EditText userName, Uri profileUri, final FirebaseUser currentUser) {
+    private void updateUserInfo(final String name, Uri profileUri, final FirebaseUser currentUser) {
 
         String userID = mAuth.getCurrentUser().getDisplayName();
 
@@ -174,7 +167,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         // Update the information of the profile: attach the photo to the account
-                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(userName.toString()).setPhotoUri(uri).build();
+                        Log.v("Name UUI", name);
+                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(uri).build();
                         currentUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
