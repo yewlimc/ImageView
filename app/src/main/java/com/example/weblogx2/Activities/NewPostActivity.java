@@ -42,6 +42,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -124,9 +125,14 @@ public class NewPostActivity extends AppCompatActivity {
                                     String imageURL = uri.toString();
 
                                     Date currentTime = Calendar.getInstance().getTime();
+                                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+                                    String posttime = dateFormat.format(currentTime);
+
+//                                    SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy  hh:mm a");
+//                                    String date = format.format(Date.parse("Your date string"));
 
                                     // Create a post object
-                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), currentTime.toString());
+                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), posttime);
 
                                     // Add post object to Firebase DB
                                     uploadPost(post);
@@ -151,7 +157,6 @@ public class NewPostActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
     }
@@ -263,4 +268,6 @@ public class NewPostActivity extends AppCompatActivity {
 //            Log.v("URI Status", postUri.toString());
 //        }
 //    }
+
+
 }

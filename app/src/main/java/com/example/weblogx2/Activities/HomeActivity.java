@@ -14,9 +14,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
     PostAdapter postAdapter;
     FirebaseDatabase firebaseDB;
     DatabaseReference dbReference;
+    private Button postDelete;
+    final int DELETE_MENU = 1;
     List<Post> postList;
 
     @Override
@@ -52,8 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 postList = new ArrayList<>();
 
-                for (DataSnapshot postsnap: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot postsnap : dataSnapshot.getChildren()) {
                     Post post = postsnap.getValue(Post.class);
                     postList.add(post);
 
@@ -77,7 +80,6 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
 
         FloatingActionButton postButton = findViewById(R.id.postButton);
@@ -107,7 +109,4 @@ public class HomeActivity extends AppCompatActivity {
         dbReference = firebaseDB.getReference("Posts");
 
     }
-
-
-
 }

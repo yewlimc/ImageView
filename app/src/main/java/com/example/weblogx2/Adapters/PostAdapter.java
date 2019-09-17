@@ -3,9 +3,12 @@ package com.example.weblogx2.Adapters;
 import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +55,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         return mData.size();
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView viewDesc;
         ImageView postImage;
@@ -72,4 +76,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         }
 
     }
+
+
+
 }
