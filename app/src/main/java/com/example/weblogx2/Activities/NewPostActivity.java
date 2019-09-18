@@ -302,9 +302,13 @@ public class NewPostActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK && requestCode == CAPTURE_CODE && data != null){
                     File file = new File(currentPhotoPath);
 
-                    Uri uri = Uri.fromFile(file);
-                    postUri = uri;
-                    postImage.setImageURI(uri);
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.example.android.fileprovider",
+                            file);
+
+                    // Uri uri = Uri.fromFile(file);
+                    postUri = photoURI;
+                    postImage.setImageURI(photoURI);
                     // postImage.setImageBitmap(imageBitmap);
 
                     Log.v("URI CameraOAR: ", postUri.toString());
