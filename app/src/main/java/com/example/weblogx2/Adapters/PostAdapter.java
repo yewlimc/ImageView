@@ -3,6 +3,7 @@ package com.example.weblogx2.Adapters;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
 
     final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    int buttonClicked = 0;
 
     public PostAdapter(Context mContext, List<Post> mData) {
         this.mContext = mContext;
@@ -66,17 +68,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.v("User current: ", userID);
-                Log.v("User post: ", post_userID);
-
                 if (!post_userID.equals(userID)) {
+
                     Toast.makeText(mContext, "Not your post. ", Toast.LENGTH_SHORT).show();
+                    buttonClicked = buttonClicked + 1;
+                    Log.v("Button clicked", ""+buttonClicked);
+
+                    // Easter egg
+                    switch (buttonClicked) {
+                        case 5: {
+                            Toast.makeText(mContext, "It's not your post. Stop it. ", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                        case 10: {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+                            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(browserIntent);
+                        }
+                        break;
+                    }
                 }
                 else
                 {
 
-                    Toast.makeText(mContext, "Delete clicked. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Delete button clicked. ", Toast.LENGTH_SHORT).show();
                     deletePost(pid, imageURL);
                 }
             }
