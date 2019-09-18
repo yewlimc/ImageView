@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -29,8 +30,15 @@ import android.widget.Toast;
 
 import com.example.weblogx2.Models.Post;
 import com.example.weblogx2.R;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -62,15 +71,26 @@ public class NewPostActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 0;
     static final int REQUEST_IMAGE_GALLERY = 1;
     String currentPhotoPath;
+    PlacesClient placesClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        newPostToolbar = findViewById(R.id.newPostToolbar);
-        setSupportActionBar(newPostToolbar);
-        getSupportActionBar().setTitle("New Post");
+        final String apiKey = "AIzaSyBVumoYBdoVkYzHZTgXJXyjFDkAk9i3TqI";
+
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            Toast.makeText(RegisterActivity.this, " We are in portrait mode",
+//                    Toast.LENGTH_SHORT).show();
+            newPostToolbar = findViewById(R.id.newPostToolbar);
+            setSupportActionBar(newPostToolbar);
+            getSupportActionBar().setTitle("New Post");
+        }else{
+//            Toast.makeText(RegisterActivity.this, "We are in Landscape mode",
+//                    Toast.LENGTH_SHORT).show();
+        }
 
         loadingBar = findViewById(R.id.newPostProgressBar);
         loadingBar.setVisibility(View.INVISIBLE);
@@ -103,7 +123,6 @@ public class NewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // get URI from another method
-
 
 
                 loadingBar.setVisibility(View.VISIBLE);
@@ -164,7 +183,31 @@ public class NewPostActivity extends AppCompatActivity {
             }
         });
 
+        if (!Places.isInitialized())
+        {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+        placesClient = Places.createClient(this);
 
+        final AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Autocomplete returns value
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                final String placeString = place.getName();
+                final LatLng latLng = place.getLatLng();
+                Log.v("Place LatLng", latLng.latitude + ", " +latLng.longitude);
+                Log.v("Place Name", placeString);
+
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+            }
+        });
     }
 
     private void uploadPost(Post post) {
