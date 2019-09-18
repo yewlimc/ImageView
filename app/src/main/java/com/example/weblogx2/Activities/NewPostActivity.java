@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -65,11 +66,13 @@ public class NewPostActivity extends AppCompatActivity {
     private Button postGallery;
     private ProgressBar loadingBar;
     private EditText descText;
+    private Uri camUri;
     private static final int requestCode = 1;
     private static final int permissionCode = 1;
     private Uri postUri = null;
     static final int REQUEST_IMAGE_CAPTURE = 0;
     static final int REQUEST_IMAGE_GALLERY = 1;
+    static final int CAPTURE_CODE = 2;
     String currentPhotoPath;
     PlacesClient placesClient;
 
@@ -102,8 +105,21 @@ public class NewPostActivity extends AppCompatActivity {
         postCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == postCamera) {
-                    dispatchTakePictureIntent();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED )
+                    {
+                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, permissionCode);
+                    }
+                    else
+                    {
+                        // Permission is granted
+                        dispatchTakePictureIntent();
+                    }
+                }
+                else
+                {
+                    // Version below Marshmellow
                 }
             }
         });
@@ -126,7 +142,7 @@ public class NewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // get URI from another method
-
+                clickButton();
 
                 loadingBar.setVisibility(View.VISIBLE);
                 postButton.setVisibility(View.INVISIBLE);
@@ -282,21 +298,21 @@ public class NewPostActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode){
-            case REQUEST_IMAGE_CAPTURE:
-                if(resultCode == RESULT_OK && requestCode == requestCode && data != null){
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    postImage.setImageBitmap(imageBitmap);
+            case CAPTURE_CODE:
+                if(resultCode == RESULT_OK && requestCode == CAPTURE_CODE && data != null){
+                    File file = new File(currentPhotoPath);
 
-                    // get Uri
-                    Uri cameraUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),imageBitmap,"title",null));
-                    postUri = cameraUri;
-                    Log.v("URI Camera: ", postUri.toString());
+                    Uri uri = Uri.fromFile(file);
+                    postUri = uri;
+                    postImage.setImageURI(uri);
+                    // postImage.setImageBitmap(imageBitmap);
+
+                    Log.v("URI CameraOAR: ", postUri.toString());
                     // Toast.makeText(NewPostActivity.this, postUri.toString(), Toast.LENGTH_SHORT).show();
                 }
 
             case REQUEST_IMAGE_GALLERY: {
-                if (resultCode == RESULT_OK && requestCode == requestCode && data != null) {
+                if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_GALLERY && data != null) {
                     // User has picked an image
                     // Save the image URI
                     postUri = data.getData();
@@ -314,22 +330,69 @@ public class NewPostActivity extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAPTURE_CODE);
+            }
         }
     }
 
-//    public void clickButton(View view) {
-//        // Log the URI
-//        if (postUri == null)
-//        {
-//            Log.v("URI Status", "null. ");
-//        }
-//        else
-//        {
-//            Log.v("URI Status", postUri.toString());
-//        }
-//    }
+        @Override
+        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults){
+            switch (requestCode) {
+                case permissionCode: {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Permissions is allowed
+                        dispatchTakePictureIntent();
+                    } else {
+                        Toast.makeText(NewPostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
 
 
-}
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+        public void clickButton () {
+            // Log the URI
+            if (postUri == null) {
+                Log.v("URI Status", "null. ");
+            } else {
+                Log.v("URI Status", postUri.toString());
+            }
+        }
+
+    }
+
+
+
+
