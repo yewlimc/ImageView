@@ -16,8 +16,9 @@ public class Post {
     private Object timestamp;
     private String userName;
     private String dateTime;
+    private String location;
 
-    public Post(String image, String description, String userID, String userImage, String userName, String dateTime) {
+    public Post(String image, String description, String userID, String userImage, String userName, String dateTime, String location) {
         this.image = image;
         this.description = description;
         this.userID = userID;
@@ -25,6 +26,7 @@ public class Post {
         this.timestamp = ServerValue.TIMESTAMP;
         this.userName = userName;
         this.dateTime = dateTime;
+        this.location = location;
     }
 
     public Post()
@@ -69,6 +71,9 @@ public class Post {
         return dateTime;
     }
 
+    public String getLocation() {
+        return location;
+    }
     // Setters
 
     public void setPostKey(String postKey) {
@@ -97,5 +102,9 @@ public class Post {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

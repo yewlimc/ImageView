@@ -63,6 +63,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         Picasso.get().load(mData.get(position).getImage()).into(holder.postImage);
         Picasso.get().load(mData.get(position).getUserImage()).into(holder.post_userImage);
         holder.userName.setText(mData.get(position).getUserName());
+        holder.location.setText(mData.get(position).getLocation());
+
         holder.datetime.setText(mData.get(position).getDateTime());
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +143,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         TextView userName;
         TextView datetime;
         Button delete;
+        TextView location;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -151,6 +154,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             userName = itemView.findViewById(R.id.postUsername);
             datetime = itemView.findViewById(R.id.posttimeView);
             delete = itemView.findViewById(R.id.post_deleteButton);
+            location = itemView.findViewById(R.id.post_locationtext);
 
         }
 

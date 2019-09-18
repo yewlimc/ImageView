@@ -73,6 +73,9 @@ public class NewPostActivity extends AppCompatActivity {
     String currentPhotoPath;
     PlacesClient placesClient;
 
+    String placeString = "";
+    LatLng latLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,9 +132,9 @@ public class NewPostActivity extends AppCompatActivity {
                 postButton.setVisibility(View.INVISIBLE);
 
                 // Check all input
+                // TODO:  Create post object and add into Firebase DB
                 if (!descText.getText().toString().isEmpty() && postUri != null)
                     {
-                    // TODO:  Create post object and add into Firebase DB
                     // Upload image to Firebase
                     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
@@ -139,7 +142,21 @@ public class NewPostActivity extends AppCompatActivity {
                     DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                     final String posttime = simpleDateFormat.toString();
                     final String postDate = dateFormat.format(currentTime);
+                    String locationName;
                     Log.v("Timestamp", posttime);
+
+                    if (placeString.equals(""))
+                    {
+                        locationName = "";
+                        Log.v("Location post", "nil");
+                    }
+                    else
+                    {
+                        locationName = placeString;
+                        Log.v("Location post", placeString);
+                    }
+
+                    final String lName = locationName;
 
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images").child((userID + "_" + postDate + posttime + ".jpg"));
                     final StorageReference imageFilePath = storageReference.child(postUri.getLastPathSegment());
@@ -151,13 +168,8 @@ public class NewPostActivity extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     String imageURL = uri.toString();
 
-
-
-//                                    SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy  hh:mm a");
-//                                    String date = format.format(Date.parse("Your date string"));
-
                                     // Create a post object
-                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), postDate);
+                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), postDate, lName);
 
                                     // Add post object to Firebase DB
                                     uploadPost(post);
@@ -197,8 +209,8 @@ public class NewPostActivity extends AppCompatActivity {
         autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                final String placeString = place.getName();
-                final LatLng latLng = place.getLatLng();
+                placeString = place.getName();
+                latLng = place.getLatLng();
                 Log.v("Place LatLng", latLng.latitude + ", " +latLng.longitude);
                 Log.v("Place Name", placeString);
 
@@ -206,6 +218,7 @@ public class NewPostActivity extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
+                Toast.makeText(NewPostActivity.this, "An error occurred: " + status, Toast.LENGTH_SHORT).show();
             }
         });
     }

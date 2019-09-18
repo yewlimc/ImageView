@@ -99,8 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    loginProgressBar.setVisibility(View.VISIBLE);
-                    loginButton.setVisibility(View.INVISIBLE);
+                    loginProgressBar.setVisibility(View.INVISIBLE);
+                    loginButton.setVisibility(View.VISIBLE);
                     Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

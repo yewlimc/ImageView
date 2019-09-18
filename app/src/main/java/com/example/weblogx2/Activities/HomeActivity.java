@@ -27,6 +27,7 @@ import com.example.weblogx2.Adapters.PostAdapter;
 import com.example.weblogx2.Models.Post;
 import com.example.weblogx2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button postDelete;
     final int DELETE_MENU = 1;
     List<Post> postList;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onStart() {
@@ -112,5 +114,40 @@ public class HomeActivity extends AppCompatActivity {
         firebaseDB = FirebaseDatabase.getInstance();
         dbReference = firebaseDB.getReference("Posts");
 
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.menu_logout:
+            {
+                logout();
+                return true;
+            }
+            default:
+                return false;
+        }
+    }
+
+    private void logout() {
+        mAuth.signOut();
+        loginUI();
+    }
+
+    private void loginUI() {
+        Intent loginIntent = new Intent (getApplicationContext(), LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 }
+
