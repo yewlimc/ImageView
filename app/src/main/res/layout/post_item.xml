@@ -19,19 +19,16 @@
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_uImage"
         app:srcCompat="@color/colorBackgroundPost" />
 
     <ImageView
         android:id="@+id/post_uImage"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/image_border"
-        app:layout_constraintBottom_toTopOf="@+id/postUsername"
-        app:layout_constraintEnd_toEndOf="@+id/postDesc"
-        app:layout_constraintTop_toBottomOf="@+id/postDesc"
+        app:layout_constraintStart_toStartOf="@+id/postImage"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/darker_gray" />
 
     <TextView
@@ -39,29 +36,32 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="64dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textAlignment="textEnd"
-        app:layout_constraintBottom_toTopOf="@+id/post_deleteButton"
-        app:layout_constraintEnd_toEndOf="@+id/post_uImage"
-        app:layout_constraintStart_toEndOf="@+id/posttimeView" />
+        android:textAlignment="viewStart"
+        app:layout_constraintBottom_toBottomOf="@+id/post_uImage"
+        app:layout_constraintEnd_toStartOf="@+id/post_deleteButton"
+        app:layout_constraintStart_toEndOf="@+id/post_uImage"
+        app:layout_constraintTop_toTopOf="@+id/post_uImage" />
 
     <TextView
         android:id="@+id/posttimeView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/postDesc"
-        app:layout_constraintTop_toBottomOf="@+id/post_uImage"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/postDesc" />
 
     <TextView
         android:id="@+id/postDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="@+id/postImage"
         app:layout_constraintHorizontal_bias="0.0"
@@ -70,12 +70,13 @@
 
     <Button
         android:id="@+id/post_deleteButton"
-        android:clickable="true"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/ic_delete_grey_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/postUsername" />
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/post_uImage"
+        app:layout_constraintEnd_toEndOf="@+id/postImage"
+        app:layout_constraintTop_toTopOf="@+id/post_uImage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,12 +69,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 if (!post_userID.equals(userID)) {
-
                     Toast.makeText(mContext, "Not your post. ", Toast.LENGTH_SHORT).show();
                     buttonClicked = buttonClicked + 1;
                     Log.v("Button clicked", ""+buttonClicked);
 
-                    // Easter egg
                     switch (buttonClicked) {
                         case 5: {
                             Toast.makeText(mContext, "It's not your post. Stop it. ", Toast.LENGTH_SHORT).show();
