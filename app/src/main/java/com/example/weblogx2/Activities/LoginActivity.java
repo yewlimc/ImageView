@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -76,6 +77,14 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(LoginActivity.this, " We are in portrait mode",
+                    Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(LoginActivity.this, "We are in Landscape mode",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void signIn(String email, String password) {
@@ -90,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    loginProgressBar.setVisibility(View.VISIBLE);
+                    loginButton.setVisibility(View.INVISIBLE);
                     Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -110,12 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         {
             // If user is already logged in upon opening, go to home intent
             homeUI();
-        }
-        else
-        {
-//            Intent lIntent = new Intent (getApplicationContext(), com.example.weblogx2.Activities.LoginActivity.class);
-//            startActivity(lIntent);
-//            finish();
         }
     }
 }

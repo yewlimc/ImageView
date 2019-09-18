@@ -131,11 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(RegisterActivity.this, " We are in portrait mode",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(RegisterActivity.this, " We are in portrait mode",
+//                    Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(RegisterActivity.this, "We are in Landscape mode",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(RegisterActivity.this, "We are in Landscape mode",
+//                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -173,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
     // This method is to upload the image onto FirebaseStorage
     private void updateUserInfo(final String name, Uri profileUri, final FirebaseUser currentUser) {
 
-        String userID = mAuth.getCurrentUser().getDisplayName();
+        String userID = mAuth.getCurrentUser().getUid();
 
         // This is to specify which folder the photo is uploaded to.
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("user_photos").child(userID + ".jpg");

@@ -1,25 +1,34 @@
 package com.example.weblogx2.Adapters;
 
+import android.app.DownloadManager;
 import android.content.Context;
-import android.media.Image;
-import android.net.Uri;
-import android.view.ContextMenu;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weblogx2.Models.Post;
 import com.example.weblogx2.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -27,6 +36,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     Context mContext;
     List<Post> mData;
+
+
+    final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     public PostAdapter(Context mContext, List<Post> mData) {
         this.mContext = mContext;
@@ -42,12 +54,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
+        final String pid = mData.get(position).getPostKey();
+        final String post_userID = mData.get(position).getUserID();
+        final String imageURL = mData.get(position).getImage();
         holder.viewDesc.setText(mData.get(position).getDescription());
         Picasso.get().load(mData.get(position).getImage()).into(holder.postImage);
         Picasso.get().load(mData.get(position).getUserImage()).into(holder.post_userImage);
         holder.userName.setText(mData.get(position).getUserName());
         holder.datetime.setText(mData.get(position).getDateTime());
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.v("User current: ", userID);
+                Log.v("User post: ", post_userID);
+
+                if (!post_userID.equals(userID)) {
+                    Toast.makeText(mContext, "Not your post. ", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+
+                    Toast.makeText(mContext, "Delete clicked. ", Toast.LENGTH_SHORT).show();
+                    deletePost(pid, imageURL);
+                }
+            }
+        });
+    }
+
+    private void deletePost(final String pid, String imageURL) {
+        StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageURL);
+        pictureReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Image delete complete, delete entry from database
+                Query find = FirebaseDatabase.getInstance().getReference("Posts").orderByChild("postKey").equalTo(pid);
+                find.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data: dataSnapshot.getChildren())
+                        {
+                            // Remove when postKey matches
+                            data.getRef().removeValue();
+                        }
+                        Toast.makeText(mContext, "Deleted successfully. ", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mContext, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -62,6 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         ImageView post_userImage;
         TextView userName;
         TextView datetime;
+        Button delete;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,8 +136,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             postImage = itemView.findViewById(R.id.postImage);
             post_userImage = itemView.findViewById(R.id.post_uImage);
             userName = itemView.findViewById(R.id.postUsername);
-            datetime = itemView.findViewById(R.id.timeView);
-
+            datetime = itemView.findViewById(R.id.posttimeView);
+            delete = itemView.findViewById(R.id.post_deleteButton);
 
         }
 

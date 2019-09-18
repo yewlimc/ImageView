@@ -111,10 +111,18 @@ public class NewPostActivity extends AppCompatActivity {
 
                 // Check all input
                 if (!descText.getText().toString().isEmpty() && postUri != null)
-                {
+                    {
                     // TODO:  Create post object and add into Firebase DB
                     // Upload image to Firebase
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images");
+                    String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
+                    Date currentTime = Calendar.getInstance().getTime();
+                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+                    final String posttime = simpleDateFormat.toString();
+                    final String postDate = dateFormat.format(currentTime);
+                    Log.v("Timestamp", posttime);
+
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images").child((userID + "_" + postDate + posttime + ".jpg"));
                     final StorageReference imageFilePath = storageReference.child(postUri.getLastPathSegment());
                     imageFilePath.putFile(postUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -124,15 +132,13 @@ public class NewPostActivity extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     String imageURL = uri.toString();
 
-                                    Date currentTime = Calendar.getInstance().getTime();
-                                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                                    String posttime = dateFormat.format(currentTime);
+
 
 //                                    SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy  hh:mm a");
 //                                    String date = format.format(Date.parse("Your date string"));
 
                                     // Create a post object
-                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), posttime);
+                                    Post post = new Post(imageURL, descText.getText().toString(), FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), postDate);
 
                                     // Add post object to Firebase DB
                                     uploadPost(post);
