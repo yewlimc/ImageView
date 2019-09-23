@@ -84,36 +84,39 @@ public class NewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
+        // API key for Places API
         final String apiKey = "AIzaSyBVumoYBdoVkYzHZTgXJXyjFDkAk9i3TqI";
 
-
+        // Detection for orientation
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            Toast.makeText(RegisterActivity.this, " We are in portrait mode",
-//                    Toast.LENGTH_SHORT).show();
+            // If orientation is in portrait, the toolbar will be shown, if its in landscape mode, toolbar will be removed
             newPostToolbar = findViewById(R.id.newPostToolbar);
             setSupportActionBar(newPostToolbar);
             getSupportActionBar().setTitle("New Post");
         }else{
-//            Toast.makeText(RegisterActivity.this, "We are in Landscape mode",
-//                    Toast.LENGTH_SHORT).show();
+
         }
 
         loadingBar = findViewById(R.id.newPostProgressBar);
         loadingBar.setVisibility(View.INVISIBLE);
 
         postCamera = findViewById(R.id.newPost_cameraButton);
+
+        // When the camera button is clicked, the build version of the device is checked
+        // If device version is Marshmallow or above, permission to access the camera and to write the external storage is required
         postCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED )
                     {
+                        // If permission are denied, permission will be requested
                         String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                         requestPermissions(permission, permissionCode);
                     }
                     else
                     {
-                        // Permission is granted
+                        // If permission is granted, user can access the camera application
                         dispatchTakePictureIntent();
                     }
                 }
@@ -126,17 +129,20 @@ public class NewPostActivity extends AppCompatActivity {
 
         postImage = findViewById(R.id.newPost_image);
 
+        // Gallery button to open up the library and select an image
         postGallery = findViewById(R.id.newPost_galleryButton);
         postGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(NewPostActivity.this, "Image clicked.  ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewPostActivity.this, "Please select an image.  ", Toast.LENGTH_SHORT).show();
                 checkRequestForPermissionGallery();
             }
         });
 
+        // Description textbox
         descText = findViewById(R.id.newPostDesc);
 
+        // Uploads image and description (and location if one is entered) to Firebase DB
         postButton = findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +153,7 @@ public class NewPostActivity extends AppCompatActivity {
                 loadingBar.setVisibility(View.VISIBLE);
                 postButton.setVisibility(View.INVISIBLE);
 
-                // Check all input
+                // Check all inputs
                 // TODO:  Create post object and add into Firebase DB
                 if (!descText.getText().toString().isEmpty() && postUri != null)
                     {
@@ -159,8 +165,8 @@ public class NewPostActivity extends AppCompatActivity {
                     final String posttime = simpleDateFormat.toString();
                     final String postDate = dateFormat.format(currentTime);
                     String locationName;
-                    Log.v("Timestamp", posttime);
 
+                    // If a location is chosen, location will be inserted
                     if (placeString.equals(""))
                     {
                         locationName = "";
@@ -174,6 +180,7 @@ public class NewPostActivity extends AppCompatActivity {
 
                     final String lName = locationName;
 
+                    // Uploads the image onto Firebase Storage
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("post_images").child((userID + "_" + postDate + posttime + ".jpg"));
                     final StorageReference imageFilePath = storageReference.child(postUri.getLastPathSegment());
                     imageFilePath.putFile(postUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -193,6 +200,7 @@ public class NewPostActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    // Error message when there is an error during uploading for post
                                     Toast.makeText(NewPostActivity.this, "Error uploading post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     loadingBar.setVisibility(View.INVISIBLE);
                                     postButton.setVisibility(View.VISIBLE);
@@ -204,6 +212,7 @@ public class NewPostActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    // If image is not chosen and description box is not filled in
                     loadingBar.setVisibility(View.INVISIBLE);
                     postButton.setVisibility(View.VISIBLE);
                     Toast.makeText(NewPostActivity.this, "Please make sure image is selected and description is filled. ", Toast.LENGTH_SHORT).show();
@@ -211,6 +220,7 @@ public class NewPostActivity extends AppCompatActivity {
             }
         });
 
+        // Initialising Autocomplete Places API
         if (!Places.isInitialized())
         {
             Places.initialize(getApplicationContext(), apiKey);
@@ -225,6 +235,7 @@ public class NewPostActivity extends AppCompatActivity {
         autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
+                // Get the name of the place chosen
                 placeString = place.getName();
                 latLng = place.getLatLng();
                 Log.v("Place LatLng", latLng.latitude + ", " +latLng.longitude);
@@ -239,6 +250,8 @@ public class NewPostActivity extends AppCompatActivity {
         });
     }
 
+    // Post upload function
+    // The post will be uploaded onto Firebase DB
     private void uploadPost(Post post) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -261,7 +274,7 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
 
-
+    // Open gallery function
     private void openGallery() {
         //TODO: Open the gallery for user to select an image
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -298,23 +311,23 @@ public class NewPostActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode){
+            // If user selects the camera option
             case CAPTURE_CODE:
                 if(resultCode == RESULT_OK && requestCode == CAPTURE_CODE && data != null){
+                    // Creates an image file
                     File file = new File(currentPhotoPath);
 
+                    // Retrieves URI of photo from the file
                     Uri photoURI = FileProvider.getUriForFile(this,
                             "com.example.android.fileprovider",
                             file);
 
-                    // Uri uri = Uri.fromFile(file);
                     postUri = photoURI;
                     postImage.setImageURI(photoURI);
-                    // postImage.setImageBitmap(imageBitmap);
 
-                    Log.v("URI CameraOAR: ", postUri.toString());
-                    // Toast.makeText(NewPostActivity.this, postUri.toString(), Toast.LENGTH_SHORT).show();
+                    Log.v("URI Camera_OnActivityResult: ", postUri.toString());
                 }
-
+            // If user selects the gallery option
             case REQUEST_IMAGE_GALLERY: {
                 if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_GALLERY && data != null) {
                     // User has picked an image
@@ -326,12 +339,14 @@ public class NewPostActivity extends AppCompatActivity {
         }
     }
 
+    // Intent for homepage
     private void homeUI() {
         Intent homeIntent = new Intent (getApplicationContext(), HomeActivity.class);
         startActivity(homeIntent);
         finish();
     }
 
+    // Camera Intent
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -354,22 +369,23 @@ public class NewPostActivity extends AppCompatActivity {
         }
     }
 
-        @Override
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
+    // Checks is permission for camera and external storage write is allowed
+    @Override
+    public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
         @NonNull int[] grantResults){
-            switch (requestCode) {
-                case permissionCode: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Permissions is allowed
-                        dispatchTakePictureIntent();
-                    } else {
-                        Toast.makeText(NewPostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
-                    }
+        switch (requestCode) {
+            case permissionCode: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permissions is allowed
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(NewPostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
                 }
             }
         }
+    }
 
-
+    // Function to create image file
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -386,16 +402,16 @@ public class NewPostActivity extends AppCompatActivity {
         return image;
     }
 
-        public void clickButton () {
-            // Log the URI
-            if (postUri == null) {
-                Log.v("URI Status", "null. ");
-            } else {
-                Log.v("URI Status", postUri.toString());
-            }
+    public void clickButton () {
+        // Log the URI
+        if (postUri == null) {
+            Log.v("URI Status", "null. ");
+        } else {
+            Log.v("URI Status", postUri.toString());
         }
-
     }
+
+}
 
 
 
