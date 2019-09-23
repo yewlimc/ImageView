@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Get posts
+        // Get posts from Firebase DB and creates the adapters
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -62,8 +62,6 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot postsnap : dataSnapshot.getChildren()) {
                     Post post = postsnap.getValue(Post.class);
                     postList.add(post);
-                    Log.v("Post", "");
-
                 }
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
                 postRecyclerView.setAdapter(postAdapter);
@@ -85,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
+        // Floating post button
         FloatingActionButton postButton = findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,20 +94,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(newPostIntent);
             }
         });
+
+        // Layout for post adapters to go in
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         manager.setReverseLayout(true);
         manager.setStackFromEnd(true);
 
         postRecyclerView = findViewById(R.id.recycleViewHome);
-        // postRecyclerView = getLayoutInflater().inflate(R.layout.activity_home, null).findViewById(R.id.recycleViewHome);
         postRecyclerView.setAdapter(postAdapter);
         postRecyclerView.setLayoutManager(manager);
-
-
-//        postRecyclerView.setLayoutManager(manager);
-//        postRecyclerView.setHasFixedSize(true);
-//        postAdapter = new PostAdapter(getApplicationContext(), postList);
-
 
         firebaseDB = FirebaseDatabase.getInstance();
         dbReference = firebaseDB.getReference("Posts");
@@ -126,9 +119,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId())
         {
+            // If user clicks on the logout option, user will be logged out
             case R.id.menu_logout:
             {
                 logout();
@@ -139,11 +132,14 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    // Logout function
     private void logout() {
+        // When user is logged out, they will be sent to the login page
         mAuth.signOut();
         loginUI();
     }
 
+    // Login intent
     private void loginUI() {
         Intent loginIntent = new Intent (getApplicationContext(), LoginActivity.class);
         startActivity(loginIntent);

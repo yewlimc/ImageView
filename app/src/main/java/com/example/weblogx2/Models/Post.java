@@ -34,15 +34,7 @@ public class Post {
 
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-// Getters
-
+    // Getters
     public String getPostKey() {
         return postKey;
     }
@@ -74,8 +66,12 @@ public class Post {
     public String getLocation() {
         return location;
     }
-    // Setters
 
+    public String getUserName() {
+        return userName;
+    }
+
+    // Setters
     public void setPostKey(String postKey) {
         this.postKey = postKey;
     }
@@ -104,7 +100,9 @@ public class Post {
         this.dateTime = dateTime;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(String location) { this.location = location; }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
