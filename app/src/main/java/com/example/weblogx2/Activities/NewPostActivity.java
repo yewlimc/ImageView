@@ -238,7 +238,9 @@ public class NewPostActivity extends AppCompatActivity {
                 // Get the name of the place chosen
                 placeString = place.getName();
                 latLng = place.getLatLng();
-                Log.v("Place LatLng", latLng.latitude + ", " +latLng.longitude);
+                double latitude = latLng.latitude;
+                double longtitude = latLng.longitude;
+                Log.v("Place LatLng", latitude + ", " +longtitude);
                 Log.v("Place Name", placeString);
 
             }
@@ -405,7 +407,7 @@ public class NewPostActivity extends AppCompatActivity {
     public void clickButton () {
         // Log the URI
         if (postUri == null) {
-            Log.v("URI Status", "null. ");
+            Log.v("URI Statuss", "null. ");
         } else {
             Log.v("URI Status", postUri.toString());
         }

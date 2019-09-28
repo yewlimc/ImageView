@@ -121,6 +121,8 @@ public class LoginActivity extends AppCompatActivity {
         {
             // If user is already logged in upon opening, go to home intent
             homeUI();
+            startActivity(homeIntent);
+            finish();
         }
     }
 }
