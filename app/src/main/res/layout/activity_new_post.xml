@@ -32,7 +32,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_photo_library_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/postButton"
+            app:layout_constraintEnd_toStartOf="@+id/newPost_postButton"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newPost_image" />
@@ -45,7 +45,7 @@
             android:background="@drawable/ic_photo_camera_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/postButton"
+            app:layout_constraintStart_toEndOf="@+id/newPost_postButton"
             app:layout_constraintTop_toBottomOf="@+id/newPost_image" />
 
         <EditText
@@ -75,7 +75,7 @@
             app:srcCompat="@drawable/ic_image_view" />
 
         <Button
-            android:id="@+id/postButton"
+            android:id="@+id/newPost_postButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -92,10 +92,10 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/postButton"
-            app:layout_constraintEnd_toEndOf="@+id/postButton"
-            app:layout_constraintStart_toStartOf="@+id/postButton"
-            app:layout_constraintTop_toTopOf="@+id/postButton" />
+            app:layout_constraintBottom_toBottomOf="@+id/newPost_postButton"
+            app:layout_constraintEnd_toEndOf="@+id/newPost_postButton"
+            app:layout_constraintStart_toStartOf="@+id/newPost_postButton"
+            app:layout_constraintTop_toTopOf="@+id/newPost_postButton" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
