@@ -102,10 +102,11 @@ public class NewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED )
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
                     {
                         // If permission are denied, permission will be requested
-                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
                         requestPermissions(permission, permissionCode);
                     }
                     else
@@ -128,8 +129,26 @@ public class NewPostActivity extends AppCompatActivity {
         postGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(NewPostActivity.this, "Please select an image.  ", Toast.LENGTH_SHORT).show();
-                checkRequestForPermissionGallery();
+//                Toast.makeText(NewPostActivity.this, "Please select an image.  ", Toast.LENGTH_SHORT).show();
+//                checkRequestForPermissionGallery();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+                    {
+                        // If permission are denied, permission will be requested
+                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                        requestPermissions(permission, permissionCode);
+                    }
+                    else
+                    {
+                        // If permission is granted, user can access the camera application
+                        openGallery();
+                    }
+                }
+                else
+                {
+                    // Version below Marshmellow
+                }
             }
         });
 
@@ -373,7 +392,7 @@ public class NewPostActivity extends AppCompatActivity {
             case permissionCode: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permissions is allowed
-                    dispatchTakePictureIntent();
+
                 } else {
                     Toast.makeText(NewPostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
                 }
