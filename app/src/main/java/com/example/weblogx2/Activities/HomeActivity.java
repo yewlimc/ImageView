@@ -19,6 +19,7 @@ import com.example.weblogx2.Models.Post;
 import com.example.weblogx2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,17 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null)
+        {
+            // If user is already logged in upon opening, go to home intent
+            Intent login = new Intent(this, com.example.weblogx2.Activities.LoginActivity.class);
+            startActivity(login);
+            finish();
+        }
+
         // Get posts from Firebase DB and creates the adapters
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override

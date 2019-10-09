@@ -30,9 +30,6 @@ public class PostGallery_EspressoTest {
     @Rule
     public GrantPermissionRule readEXT_PermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
 
-    @Rule
-    public GrantPermissionRule cameraPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
-
     @Test
     public void postGalleryImageTest() throws Exception {
         // Clicks the post button

@@ -36,8 +36,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     Context mContext;
     List<Post> mData;
 
-
-    final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//    final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     int buttonClicked = 0;
 
     public PostAdapter(Context mContext, List<Post> mData) {
@@ -54,6 +53,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final String pid = mData.get(position).getPostKey();
         final String post_userID = mData.get(position).getUserID();
         final String imageURL = mData.get(position).getImage();
