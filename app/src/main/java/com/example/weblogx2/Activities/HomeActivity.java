@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.weblogx2.Adapters.PostAdapter;
@@ -35,8 +35,6 @@ public class HomeActivity extends AppCompatActivity {
     PostAdapter postAdapter;
     FirebaseDatabase firebaseDB;
     DatabaseReference dbReference;
-    private Button postDelete;
-    final int DELETE_MENU = 1;
     List<Post> postList;
     private FirebaseAuth mAuth;
 
@@ -52,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot postsnap : dataSnapshot.getChildren()) {
                     Post post = postsnap.getValue(Post.class);
                     postList.add(post);
+                    Log.v("PostKey", postsnap.getKey());
                 }
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
                 postRecyclerView.setAdapter(postAdapter);
@@ -78,9 +77,8 @@ public class HomeActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.this, "Post button clicked. ", Toast.LENGTH_LONG).show();
                 // Send us to a page to select image, enter description, and post
-                Intent newPostIntent = new Intent(com.example.weblogx2.Activities.HomeActivity.this, NewPostActivity.class);
+                Intent newPostIntent = new Intent(com.example.weblogx2.Activities.HomeActivity.this, PostActivity.class);
                 startActivity(newPostIntent);
             }
         });
@@ -103,7 +101,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu, menu);
-
         return true;
     }
 
@@ -126,6 +123,7 @@ public class HomeActivity extends AppCompatActivity {
     private void logout() {
         // When user is logged out, they will be sent to the login page
         mAuth.signOut();
+        Toast.makeText(HomeActivity.this, "Logged out. ", Toast.LENGTH_SHORT).show();
         loginUI();
     }
 

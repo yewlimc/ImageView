@@ -51,7 +51,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-public class NewPostActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
 
     Toolbar newPostToolbar;
     private ImageView postImage;
@@ -60,16 +60,13 @@ public class NewPostActivity extends AppCompatActivity {
     private Button postGallery;
     private ProgressBar loadingBar;
     private EditText descText;
-    private Uri camUri;
     private static final int requestCode = 1;
     private static final int permissionCode = 1;
     private Uri postUri = null;
-    static final int REQUEST_IMAGE_CAPTURE = 0;
     static final int REQUEST_IMAGE_GALLERY = 1;
     static final int CAPTURE_CODE = 2;
     String currentPhotoPath;
     PlacesClient placesClient;
-
     String placeString = "";
     LatLng latLng;
 
@@ -88,7 +85,6 @@ public class NewPostActivity extends AppCompatActivity {
             setSupportActionBar(newPostToolbar);
             getSupportActionBar().setTitle("New Post");
         }else{
-
         }
 
         loadingBar = findViewById(R.id.newPostProgressBar);
@@ -129,7 +125,7 @@ public class NewPostActivity extends AppCompatActivity {
         postGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(NewPostActivity.this, "Please select an image.  ", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PostActivity.this, "Please select an image.  ", Toast.LENGTH_SHORT).show();
 //                checkRequestForPermissionGallery();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
@@ -214,7 +210,7 @@ public class NewPostActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     // Error message when there is an error during uploading for post
-                                    Toast.makeText(NewPostActivity.this, "Error uploading post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PostActivity.this, "Error uploading post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     loadingBar.setVisibility(View.INVISIBLE);
                                     postButton.setVisibility(View.VISIBLE);
                                 }
@@ -228,7 +224,7 @@ public class NewPostActivity extends AppCompatActivity {
                     // If image is not chosen and description box is not filled in
                     loadingBar.setVisibility(View.INVISIBLE);
                     postButton.setVisibility(View.VISIBLE);
-                    Toast.makeText(NewPostActivity.this, "Please make sure image is selected and description is filled. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, "Please make sure image is selected and description is filled. ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -260,7 +256,7 @@ public class NewPostActivity extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
-                Toast.makeText(NewPostActivity.this, "An error occurred: " + status, Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostActivity.this, "An error occurred: " + status, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -280,7 +276,7 @@ public class NewPostActivity extends AppCompatActivity {
         reference.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(NewPostActivity.this, "Post complete. ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostActivity.this, "Post complete. ", Toast.LENGTH_SHORT).show();
                 loadingBar.setVisibility(View.INVISIBLE);
                 postButton.setVisibility(View.VISIBLE);
                 homeUI();
@@ -301,18 +297,18 @@ public class NewPostActivity extends AppCompatActivity {
         //TODO: Check and request permission of device before user selects an image from the gallery.
 
         // If permission is not granted, user will be asked to allow access.
-        if (ContextCompat.checkSelfPermission(NewPostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED)
         {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(NewPostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
+            if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
             {
-                Toast.makeText(NewPostActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();
 
             }
             else
             {
 
-                ActivityCompat.requestPermissions(NewPostActivity.this, new String []{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+                ActivityCompat.requestPermissions(PostActivity.this, new String []{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
             }
         }
         else
@@ -394,7 +390,7 @@ public class NewPostActivity extends AppCompatActivity {
                     // Permissions is allowed
 
                 } else {
-                    Toast.makeText(NewPostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, "Please allow the application to access the camera. ", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -420,7 +416,7 @@ public class NewPostActivity extends AppCompatActivity {
     public void clickButton () {
         // Log the URI
         if (postUri == null) {
-            Log.v("URI Statuss", "null. ");
+            Log.v("URI Status", "null. ");
         } else {
             Log.v("URI Status", postUri.toString());
         }

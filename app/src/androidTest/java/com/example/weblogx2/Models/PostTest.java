@@ -14,7 +14,6 @@ public class PostTest {
     private String description = "test_description";
     private String userID = "androidTest";
     private String userImage = "image_link";
-    private Object timestamp;
     private String userName = "androidTest_name";
     private String dateTime = "9/19/2019";
     private String location = "Singapore";

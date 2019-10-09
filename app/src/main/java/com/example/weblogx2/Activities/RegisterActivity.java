@@ -34,14 +34,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 
 public class RegisterActivity extends AppCompatActivity {
 
     ImageView userImage;
     static int requestCode = 1;
-    static int ARrequestCode = 1;
     Uri profileUri;
 
     private EditText userName;
