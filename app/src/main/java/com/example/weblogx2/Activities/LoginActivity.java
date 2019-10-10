@@ -56,14 +56,11 @@ public class LoginActivity extends AppCompatActivity {
                 final String email = userEmail.getText().toString();
                 final String password = userPassword.getText().toString();
 
-                if (email.isEmpty() || password.isEmpty())
-                {
+                if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please fill in all fields. ", Toast.LENGTH_SHORT).show();
                     loginProgressBar.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     signIn(email, password);
                 }
             }
@@ -72,14 +69,14 @@ public class LoginActivity extends AppCompatActivity {
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent = new Intent (getApplicationContext(), com.example.weblogx2.Activities.RegisterActivity.class);
+                Intent registerIntent = new Intent(getApplicationContext(), com.example.weblogx2.Activities.RegisterActivity.class);
                 startActivity(registerIntent);
                 finish();
             }
         });
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        }else{
+        } else {
         }
     }
 
@@ -87,14 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     loginProgressBar.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
                     homeUI();
-                }
-                else
-                {
+                } else {
                     loginProgressBar.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
                     Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -113,8 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        if (user != null)
-        {
+        if (user != null) {
             // If user is already logged in upon opening, go to home intent
             homeUI();
             startActivity(homeIntent);
