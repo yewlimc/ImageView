@@ -11,7 +11,7 @@ public class PostTest {
 
     Post postTest;
     private String postKey = "test001";
-    private String image = "contents://something/here";
+    private String image = "contents://android/data";
     private String description = "test_description";
     private String userID = "androidTest";
     private String userImage = "image_link";

@@ -36,7 +36,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     Context mContext;
     List<Post> mData;
 
-//    final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     int buttonClicked = 0;
 
     public PostAdapter(Context mContext, List<Post> mData) {
@@ -130,7 +129,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     public int getItemCount() {
         return mData.size();
     }
-
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView viewDesc;

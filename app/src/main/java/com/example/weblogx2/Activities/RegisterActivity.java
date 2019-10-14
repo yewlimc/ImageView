@@ -172,7 +172,6 @@ public class RegisterActivity extends AppCompatActivity {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("user_photos").child(userID + ".jpg");
 
         // This is to retrieve the file path of the image
-//        final StorageReference imageFilePath = mStorage.child(profileUri.getLastPathSegment());
         final StorageReference imageFilePath = mStorage;
 
         // This is to put the file into Firebase
@@ -183,7 +182,6 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         // Update the information of the profile: attach the photo to the account
-                        Log.v("Name UUI", name);
                         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(uri).build();
                         currentUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -225,6 +223,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED)
         {
+            // If the permission is still denied by user in dialog
             if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
             {
                 Toast.makeText(RegisterActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();

@@ -26,7 +26,7 @@ public class Logout_EspressoTest {
     public ActivityTestRule<HomeActivity> mLoginActivityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
 
     @Test
-    public void postGalleryImageTest() throws Exception {
+    public void logOutTest() throws Exception {
         // Clicks the post button
 
         FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();

@@ -80,10 +80,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     private void signIn(String email, String password) {
+        // TODO: Sign in using Firebase Authentication
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                // If the task is successfull, go to home page
                 if (task.isSuccessful()) {
                     loginProgressBar.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
