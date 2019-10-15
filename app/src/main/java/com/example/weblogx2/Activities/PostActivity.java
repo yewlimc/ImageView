@@ -236,6 +236,7 @@ public class PostActivity extends AppCompatActivity {
         }
         placesClient = Places.createClient(this);
 
+        // Initialising Autocomplete fragment
         final AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Autocomplete returns value
@@ -293,29 +294,29 @@ public class PostActivity extends AppCompatActivity {
         startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 
-    private void checkRequestForPermissionGallery() {
-        //TODO: Check and request permission of device before user selects an image from the gallery.
-
-        // If permission is not granted, user will be asked to allow access.
-        if (ContextCompat.checkSelfPermission(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-            {
-                Toast.makeText(PostActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();
-
-            }
-            else
-            {
-
-                ActivityCompat.requestPermissions(PostActivity.this, new String []{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
-            }
-        }
-        else
-        {
-            openGallery();
-        }
-    }
+//    private void checkRequestForPermissionGallery() {
+//        //TODO: Check and request permission of device before user selects an image from the gallery.
+//
+//        // If permission is not granted, user will be asked to allow access.
+//        if (ContextCompat.checkSelfPermission(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED)
+//        {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
+//            {
+//                Toast.makeText(PostActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();
+//
+//            }
+//            else
+//            {
+//
+//                ActivityCompat.requestPermissions(PostActivity.this, new String []{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+//            }
+//        }
+//        else
+//        {
+//            openGallery();
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
