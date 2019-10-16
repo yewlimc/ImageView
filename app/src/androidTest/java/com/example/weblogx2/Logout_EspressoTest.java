@@ -31,11 +31,8 @@ public class Logout_EspressoTest {
 
         FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (current == null)
-        {
-        }
-        else
-        {
+        if (current == null) {
+        } else {
             Thread.sleep(2500);
             // get context
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();

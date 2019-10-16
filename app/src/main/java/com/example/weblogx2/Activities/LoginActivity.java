@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // To get the current orientation of the device
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
         } else {
         }

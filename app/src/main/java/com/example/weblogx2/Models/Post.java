@@ -29,8 +29,7 @@ public class Post {
         this.location = location;
     }
 
-    public Post()
-    {
+    public Post() {
 
     }
 
@@ -100,7 +99,9 @@ public class Post {
         this.dateTime = dateTime;
     }
 
-    public void setLocation(String location) { this.location = location; }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;

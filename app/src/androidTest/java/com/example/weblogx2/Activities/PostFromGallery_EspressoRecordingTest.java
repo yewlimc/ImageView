@@ -53,40 +53,39 @@ public class PostFromGallery_EspressoRecordingTest {
 
         FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (current == null)
-        {
+        if (current == null) {
             ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.loginEmail),
-                        childAtPosition(
-                                allOf(withId(R.id.constraintLayout2),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("shebelieved@helied.com"), closeSoftKeyboard());
+                    allOf(withId(R.id.loginEmail),
+                            childAtPosition(
+                                    allOf(withId(R.id.constraintLayout2),
+                                            childAtPosition(
+                                                    withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                    0)),
+                                    3),
+                            isDisplayed()));
+            appCompatEditText.perform(replaceText("shebelieved@helied.com"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.loginPassword),
-                        childAtPosition(
-                                allOf(withId(R.id.constraintLayout2),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("auth00"), closeSoftKeyboard());
+            ViewInteraction appCompatEditText2 = onView(
+                    allOf(withId(R.id.loginPassword),
+                            childAtPosition(
+                                    allOf(withId(R.id.constraintLayout2),
+                                            childAtPosition(
+                                                    withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                    0)),
+                                    2),
+                            isDisplayed()));
+            appCompatEditText2.perform(replaceText("auth00"), closeSoftKeyboard());
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.loginButton), withText("Login"),
-                        childAtPosition(
-                                allOf(withId(R.id.constraintLayout2),
-                                        childAtPosition(
-                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+            ViewInteraction appCompatButton = onView(
+                    allOf(withId(R.id.loginButton), withText("Login"),
+                            childAtPosition(
+                                    allOf(withId(R.id.constraintLayout2),
+                                            childAtPosition(
+                                                    withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                    0)),
+                                    1),
+                            isDisplayed()));
+            appCompatButton.perform(click());
 
             Thread.sleep(5000);
         }
@@ -163,7 +162,6 @@ public class PostFromGallery_EspressoRecordingTest {
                         0),
                         isDisplayed()));
         relativeLayout.perform(click());
-
 
 
         ViewInteraction appCompatButton4 = onView(

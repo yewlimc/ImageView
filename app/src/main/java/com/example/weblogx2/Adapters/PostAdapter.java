@@ -70,7 +70,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                 if (!post_userID.equals(userID)) {
                     Toast.makeText(mContext, "Not your post. ", Toast.LENGTH_SHORT).show();
                     buttonClicked = buttonClicked + 1;
-                    Log.v("Button clicked", ""+buttonClicked);
+                    Log.v("Button clicked", "" + buttonClicked);
 
                     switch (buttonClicked) {
                         case 5: {
@@ -84,9 +84,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         }
                         break;
                     }
-                }
-                else
-                {
+                } else {
                     deletePost(pid, imageURL);
                 }
             }
@@ -103,8 +101,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                 find.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot data: dataSnapshot.getChildren())
-                        {
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
                             // Remove when postKey matches
                             data.getRef().removeValue();
                         }
@@ -153,7 +150,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         }
 
     }
-
 
 
 }

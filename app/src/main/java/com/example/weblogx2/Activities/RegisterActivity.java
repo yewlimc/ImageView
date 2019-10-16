@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // Init
-        userImage = (ImageView) findViewById(R.id.registerImage);
+        userImage = findViewById(R.id.registerImage);
 
         userName = findViewById(R.id.registerName);
         userEmail = findViewById(R.id.registerEmail);
@@ -88,18 +88,15 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password = userPassword.getText().toString();
                 final String cfmPassword = userCfmPassword.getText().toString();
 
-                // If the register button is pressed, the fields are checked to see if they are empty
+                // When the register button is pressed, the fields are checked to see if they are empty
                 // If any fields are empty, a "Toast" will be displayed to the user asking him/her to fill in all fields
                 // If all fields are filled in, the method "CreateUserAccount" will be started
-                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || cfmPassword.isEmpty() || profileUri == null)
-                {
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || cfmPassword.isEmpty() || profileUri == null) {
                     Log.v("Name", name);
                     Toast.makeText(RegisterActivity.this, "Please fill in all fields. ", Toast.LENGTH_SHORT).show();
                     registerButton.setVisibility(View.VISIBLE);
                     loadingBar.setVisibility(View.INVISIBLE);
-                }
-                else
-                {
+                } else {
                     CreateUserAccount(name, email, password);
                 }
             }
@@ -116,19 +113,16 @@ public class RegisterActivity extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT>=22)
-                {
+                if (Build.VERSION.SDK_INT >= 22) {
                     checkRequestForPermission();
-                }
-                else
-                {
+                } else {
                     openGallery();
                 }
             }
         });
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        }else{
+        } else {
         }
     }
 
@@ -139,8 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     Log.v("Username set to", userName.toString());
                     UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(userName.toString()).build();
                     // If the account is successfully created, a toast is displayed to let the user know that the account has been created
@@ -151,9 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
                     // note: "image.getDrawable()" is not used as a Uri will be assigned no matter if an image is selected or not.
                     Log.v("Image is available: ", "Upload");
                     updateUserInfo(name, profileUri, mAuth.getCurrentUser());
-                }
-                else
-                {
+                } else {
                     Toast.makeText(RegisterActivity.this, "Account failed to create: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     registerButton.setVisibility(View.VISIBLE);
                     loadingBar.setVisibility(View.INVISIBLE);
@@ -186,11 +177,10 @@ public class RegisterActivity extends AppCompatActivity {
                         currentUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful())
-                                {
+                                if (task.isSuccessful()) {
 
-                                        Toast.makeText(RegisterActivity.this, "Register completed. ", Toast.LENGTH_SHORT).show();
-                                        homeUI();
+                                    Toast.makeText(RegisterActivity.this, "Register completed. ", Toast.LENGTH_SHORT).show();
+                                    homeUI();
 
                                 }
 
@@ -204,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void homeUI() {
-        Intent homeIntent = new Intent (getApplicationContext(), HomeActivity.class);
+        Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(homeIntent);
         finish();
     }
@@ -221,21 +211,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         // If permission is not granted, user will be asked to allow access.
         if (ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-        {
+                != PackageManager.PERMISSION_GRANTED) {
             // If the permission is still denied by user in dialog
-            if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-            {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Toast.makeText(RegisterActivity.this, "Please allow the application to access the gallery. ", Toast.LENGTH_SHORT).show();
 
+            } else {
+                ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
             }
-            else
-            {
-                ActivityCompat.requestPermissions(RegisterActivity.this, new String []{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
-            }
-        }
-        else
-        {
+        } else {
             openGallery();
         }
     }
@@ -245,8 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == requestCode && data != null)
-        {
+        if (resultCode == RESULT_OK && requestCode == requestCode && data != null) {
             // User has picked an image
             // Save the image URI
             profileUri = data.getData();

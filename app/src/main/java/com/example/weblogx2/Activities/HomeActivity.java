@@ -45,8 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
-        if (user == null)
-        {
+        if (user == null) {
             // If user is already logged in upon opening, go to home intent
             Intent login = new Intent(this, com.example.weblogx2.Activities.LoginActivity.class);
             startActivity(login);
@@ -80,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -118,11 +117,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             // If user clicks on the logout option, user will be logged out
-            case R.id.menu_logout:
-            {
+            case R.id.menu_logout: {
                 logout();
                 return true;
             }
@@ -141,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Login intent
     private void loginUI() {
-        Intent loginIntent = new Intent (getApplicationContext(), LoginActivity.class);
+        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(loginIntent);
         finish();
     }

@@ -84,7 +84,7 @@ public class PostActivity extends AppCompatActivity {
             newPostToolbar = findViewById(R.id.newPostToolbar);
             setSupportActionBar(newPostToolbar);
             getSupportActionBar().setTitle("New Post");
-        }else{
+        } else {
         }
 
         loadingBar = findViewById(R.id.newPostProgressBar);
@@ -99,20 +99,15 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-                    {
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                         // If permission are denied, permission will be requested
-                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
                         requestPermissions(permission, permissionCode);
-                    }
-                    else
-                    {
+                    } else {
                         // If permission is granted, user can access the camera application
                         dispatchTakePictureIntent();
                     }
-                }
-                else
-                {
+                } else {
                     // Version below Marshmellow
                 }
             }
@@ -129,20 +124,15 @@ public class PostActivity extends AppCompatActivity {
 //                checkRequestForPermissionGallery();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-                    {
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                         // If permission are denied, permission will be requested
-                        String [] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
                         requestPermissions(permission, permissionCode);
-                    }
-                    else
-                    {
+                    } else {
                         // If permission is granted, user can access the camera application
                         openGallery();
                     }
-                }
-                else
-                {
+                } else {
                     // Version below Marshmellow
                 }
             }
@@ -164,8 +154,7 @@ public class PostActivity extends AppCompatActivity {
 
                 // Check all inputs
                 // TODO:  Create post object and add into Firebase DB
-                if (!descText.getText().toString().isEmpty() && postUri != null)
-                    {
+                if (!descText.getText().toString().isEmpty() && postUri != null) {
                     // Upload image to Firebase
                     String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
@@ -176,13 +165,10 @@ public class PostActivity extends AppCompatActivity {
                     String locationName;
 
                     // If a location is chosen, location will be inserted
-                    if (placeString.equals(""))
-                    {
+                    if (placeString.equals("")) {
                         locationName = "";
                         Log.v("Location post", "nil");
-                    }
-                    else
-                    {
+                    } else {
                         locationName = placeString;
                         Log.v("Location post", placeString);
                     }
@@ -218,9 +204,7 @@ public class PostActivity extends AppCompatActivity {
                         }
                     });
 
-                }
-                else
-                {
+                } else {
                     // If image is not chosen and description box is not filled in
                     loadingBar.setVisibility(View.INVISIBLE);
                     postButton.setVisibility(View.VISIBLE);
@@ -230,8 +214,7 @@ public class PostActivity extends AppCompatActivity {
         });
 
         // Initialising Autocomplete Places API
-        if (!Places.isInitialized())
-        {
+        if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
         }
         placesClient = Places.createClient(this);
@@ -250,7 +233,7 @@ public class PostActivity extends AppCompatActivity {
                 latLng = place.getLatLng();
                 double latitude = latLng.latitude;
                 double longtitude = latLng.longitude;
-                Log.v("Place LatLng", latitude + ", " +longtitude);
+                Log.v("Place LatLng", latitude + ", " + longtitude);
                 Log.v("Place Name", placeString);
 
             }
@@ -322,10 +305,10 @@ public class PostActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch(requestCode){
+        switch (requestCode) {
             // If user selects the camera option
             case CAPTURE_CODE:
-                if(resultCode == RESULT_OK && requestCode == CAPTURE_CODE && data != null){
+                if (resultCode == RESULT_OK && requestCode == CAPTURE_CODE && data != null) {
                     // Creates an image file
                     File file = new File(currentPhotoPath);
 
@@ -339,7 +322,7 @@ public class PostActivity extends AppCompatActivity {
 
                     Log.v("URI Camera_OnActivityResult: ", postUri.toString());
                 }
-            // If user selects the gallery option
+                // If user selects the gallery option
             case REQUEST_IMAGE_GALLERY: {
                 if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_GALLERY && data != null) {
                     // User has picked an image
@@ -353,7 +336,7 @@ public class PostActivity extends AppCompatActivity {
 
     // Intent for homepage
     private void homeUI() {
-        Intent homeIntent = new Intent (getApplicationContext(), HomeActivity.class);
+        Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(homeIntent);
         finish();
     }
@@ -383,8 +366,8 @@ public class PostActivity extends AppCompatActivity {
 
     // Checks is permission for camera and external storage write is allowed
     @Override
-    public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case permissionCode: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -414,7 +397,7 @@ public class PostActivity extends AppCompatActivity {
         return image;
     }
 
-    public void clickButton () {
+    public void clickButton() {
         // Log the URI
         if (postUri == null) {
             Log.v("URI Status", "null. ");
